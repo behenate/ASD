@@ -77,3 +77,5 @@ heap = MinHeap(heap_arr)
 print(heap_arr)
 print(k_th_greater(heap_arr,4, 7))
 print(sorted(heap_arr))
+
+# no napraw ze sei
