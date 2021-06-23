@@ -1,0 +1,1 @@
+# Zrobić z każdej krawędzi logarytm i zwykły dijkstra
