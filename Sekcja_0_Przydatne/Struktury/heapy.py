@@ -41,7 +41,7 @@ class MaxHeap:
             parent = (i - 1) // 2
 
     def get_max(self):
-        return self.arr[-1]
+        return self.arr[0]
 
 class MinHeap:
     def __init__(self, arr):
@@ -86,4 +86,4 @@ class MinHeap:
             parent = (i - 1) // 2
 
     def get_min(self):
-        return self.arr[-1]
+        return self.arr[0]
