@@ -36,7 +36,7 @@ def kruskal(G, num_v):
 
         if find(A[y]) != find(A[x]):
             union(A[x], A[y])
-            print("used", val)
+            print("used", val, x, y)
     print(G)
 
 

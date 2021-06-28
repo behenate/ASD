@@ -4,7 +4,7 @@ from queue import PriorityQueue
 
 def t(n):
     if n == 0:
-        print("Cos zlew jest")
+        print("Cos zle jest")
     if n == 1:
         return 0
     elif n == 5:
