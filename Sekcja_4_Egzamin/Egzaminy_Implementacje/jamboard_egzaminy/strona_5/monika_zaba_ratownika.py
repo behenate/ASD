@@ -6,7 +6,7 @@ def monika(points, l):
     n = len(points)
     G = [[0 for i in range(n)] for i in range(n)]
     for i in range(n):
-        for j in range(i + 1, n):
+        for j in range(n):
             if dist(points[i], points[j]) <= l / 2:
                 G[i][j] = 0.5
             elif dist(points[i], points[j]) <= l:
