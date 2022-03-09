@@ -1,4 +1,4 @@
-
+# Zaimplementuj algorytm umożliwiający wstawianie do kopca
 
 def insert_into_heap(tree, value):
     n = len(tree)

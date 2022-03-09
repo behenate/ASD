@@ -1,3 +1,7 @@
+"""
+Algorytm wykorzystujący do sortowania radix sort po wcześniejszym częściowym sortowaniu countsotem
+"""
+
 from random import randint, seed
 from time import time
 

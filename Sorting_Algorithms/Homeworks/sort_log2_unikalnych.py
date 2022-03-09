@@ -1,3 +1,6 @@
+"""
+Wiedząc że w tablicy jest log2 unikalnych wartości posortuj ją
+"""
 from random import seed, randint, choice
 from time import time
 from math import log2, floor, inf
