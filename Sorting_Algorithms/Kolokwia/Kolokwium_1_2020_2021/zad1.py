@@ -8,70 +8,128 @@ Algorytm powinien być jak najszybszy oraz używać jak najmniej pamięci ponad 
 jest na przechowywanie danych wejściowych (choć algorytm nie musi działać w miejscu). Proszę
 podać złożoność czasową i pamięciową zaproponowanego algorytmu.
 """
-"""
-Autor: Wojciech Dróżdż
-Algorytm polega na znalezieniu N median wartości w tablicy, wpisaniu ich na przekątną i
-przepisaniu odpowiednio mniejszych wartości pod i większych nad tą przekątną.
-Mamy tablicę NxN elementów. W szacowaniu złożoności liczba n oznacza liczbę wszystkich elementów w tej tablicy.
-Tablicę rzutuję na jednowymiarową i zapisuję ją - złożoność pamięciowa i obliczeniowa : O(n).
-Tablicę sortuję algorytmem quicksort. - złożoność czasowa O(nlog(n)).
-Znajduje index pierwszej i ostatniej z median i przepipisuje wartosci w na przekatna O (N) czasu
-Wiem żę wszystkie elementy przed pierwszym indexem median są mniejsze a wszystkie po większe od nich więc wpisuję je
-na odpowiednie miejsca. - Zajmuje to O(n - N) czasu
-złożoność czasowa : O(nlog(n))
-złożoność pamięciowa: O(n)
-Uwaga! Algorytm można rozwiązać szybciej, gdy wartości są rzeczywiście różne. Można użyć algorytmu select by znaleźć
-N median - złożoność N*n i wiedząc że wszystkie wartości są różne na podstawie czy są większe czy mniejsze od
-najmniejszego i największego ze znalezionych median decydować o ich miejscu. Zdecydopwałem się jednak na wolniejszą wersję,
-która przechodzi podane testy.
-"""
 
 from zad1testy import runtests
+from math import sqrt
 
-def partition(tab, p, r):
-    last = tab[r]
+
+def partition(tab, p, r, n):
+    last = ct(tab, r, n)
     i = p - 1
     for j in range(p, r):
-        if tab[j] <= last:
+        if ct(tab, j, n) <= last:
             i = i + 1
-            tab[i], tab[j] = tab[j], tab[i]
-
-    tab[i + 1], tab[r] = tab[r], tab[i + 1]
+            i_i = c(i, n)
+            j_i = c(j, n)
+            tab[i_i[0]][i_i[1]], tab[j_i[0]][j_i[1]] = tab[j_i[0]][j_i[1]], tab[i_i[0]][i_i[1]]
+    i_i = c(i + 1, n)
+    r_i = c(r, n)
+    tab[i_i[0]][i_i[1]], tab[r_i[0]][r_i[1]] = tab[r_i[0]][r_i[1]], tab[i_i[0]][i_i[1]]
+    # tab[i + 1], tab[r] = tab[r], tab[i + 1]
     return i + 1
 
 
-def quicksort(tab, p, r):
-    if p < r:
-        i = partition(tab, p, r)
-        quicksort(tab, p, i - 1)
-        quicksort(tab, i + 1, r)
+def select(tab, p, r, k, n):
+    if p == r:
+        return tab[c(p, n)[0]][c(p, n)[1]]
+    q = partition(tab, p, r, n)
+    if q == k:
+        return tab[c(q, n)[0]][c(q, n)[1]]
+    elif k < q:
+        return select(tab, p, q - 1, k, n)
+    else:
+        return select(tab, q + 1, r, k, n)
+
+
+def c(i, n):
+    if i < ((n ** 2) - n) // 2:
+        y = (-1 + sqrt(1 + 8 * i)) // 2
+        x = i - (((1 + y) / 2) * y)
+        y+=1
+    elif ((n ** 2) - n) // 2 <= i < ((n ** 2) - n) // 2 + n:
+        x = i - ((n ** 2) - n) // 2
+        return int(x), int(x)
+    elif i >= ((n ** 2) - n) // 2 + n:
+        i = i - (((n ** 2) - n) // 2 + n)
+        y = (-1 + sqrt(1 + 8 * i)) // 2
+        x = i - (((1 + y) / 2) * y)
+        y += 1
+        y = n - 1 - y
+        x = n - 1 - x
+    return int(y), int(x)
+
+
+def ct(tab, i, n):
+    return tab[c(i, n)[0]][c(i, n)[1]]
+
 
 def Median(T):
     n = len(T)
-    num_elems = n**2
-    in_data = [0]*num_elems
-    c = 0
-    for sub in T:
-        for elem in sub:
-            in_data[c] = elem
-            c += 1
+    m = n * n
+    s_i = (m - n) // 2
+    e_i = s_i + (n - 1)
+    low = select(T, 0, m-1, s_i, n)
+    high = select(T, 0, m-1, e_i, n)
+    diag_cnt = 0
+    # for line in T:
+    #     print(line)
+    # for i in range(m):
+    #     y = c(i, n)[0]
+    #     x = c(i, n)[1]
+    #     if low <= T[y][x] <= high and x != y and diag_cnt<n:
+    #         print("swapping", diag_cnt, y, x, T[y][x], T[diag_cnt][diag_cnt])
+    #         T[diag_cnt][diag_cnt], T[y][x] = T[y][x], T[diag_cnt][diag_cnt]
+    #         diag_cnt += 1
+    #     elif low <= T[y][x] <= high and diag_cnt == x:
+    #         diag_cnt += 1
+    # for line in T:
+    #     print(line)
+    # i1 = 1
+    # j1 = 0
+    # i2 = 0
+    # j2 = 1
+    # while i1 < n and j2 < n:
+    #     s_x, s_y, b_x, b_y = -1, -1, -1, -1
+    #     # dolna przekatna
+    #     while i1 < n:
+    #         while j1 < i1:
+    #             if T[i1][j1] > high:
+    #                 s_y, s_x = i1, j1
+    #                 break
+    #             j1 += 1
+    #         if s_x != -1:
+    #             break
+    #
+    #         j1 = 0
+    #         i1 += 1
+    #     while j2 < n:
+    #         while i2 < j2:
+    #             if T[i2][j2] < low:
+    #                 b_y, b_x = i2, j2
+    #                 break
+    #             i2 += 1
+    #         if b_x != -1:
+    #             break
+    #
+    #         i2 = 0
+    #         j2 += 1
+    #     if s_x != -1:
+    #         print("swap: ", T[s_y][s_x], T[b_y][b_x])
+    #         T[s_y][s_x], T[b_y][b_x] = T[b_y][b_x], T[s_y][s_x]
+    #     print("first:", i1, j2)
 
-    quicksort(in_data, 0, num_elems-1)
-    m_p = ((num_elems-n) // 2)
-    m_q = m_p+n-1
-    for i in range(n):
-        T[i][i] = in_data[m_q - i]
-    c = len(in_data)-1
-    for i in range(n):
-        for j in range(i + 1, n):
-            T[i][j] = in_data[c]
-            c -= 1
-
-    c = 0
-    for i in range(n-1,-1,-1):
-        for j in range(i):
-            T[i][j] = in_data[c]
-            c += 1
     return T
 
-runtests( Median )
+
+#
+runtests(Median)
+
+T = [[2, 5, 2, 5],
+     [2, 5, 5, 2],
+     [2, 5, 2, 2],
+     [2, 5, 5, 5],
+     ]
+# T =[[1, 2],
+# [3, 4]]
+Median(T)
+
